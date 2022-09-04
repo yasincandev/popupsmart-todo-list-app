@@ -10,10 +10,8 @@ const AddTodo = (props) => {
 
   return (
     <div className="left-container">
-      <h1 className="header">
-        What Do You <br /> Want ToDo?
-      </h1>
-      <form onSubmit={props.formSubmit}>
+      <h1 className="header">What Do You Want ToDo?</h1>
+      <div className="input-button-container" onSubmit={props.formSubmit}>
         <input
           onChange={props.handleChange}
           type="text"
@@ -26,7 +24,7 @@ const AddTodo = (props) => {
         <button className="add-btn" onClick={props.addTask}>
           Add To Do
         </button>
-      </form>
+      </div>
     </div>
   );
 };

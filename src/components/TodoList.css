@@ -8,18 +8,17 @@
   gap: 1rem;
 }
 
-.list-container::-webkit-scrollbar-track {
-  border: 1px solid rgb(238, 227, 227);
-  background-color: rgb(238, 227, 227);
+#dark .list-container {
+  color: #fff;
 }
 
-.list-container::-webkit-scrollbar {
-  width: 10px;
-  background-color: rgb(238, 227, 227);
-}
-.list-container::-webkit-scrollbar-thumb {
-  background-color: rgb(238, 227, 227);
+#dark .todo-list {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid rgb(15, 14, 14);
   border-radius: 15px;
+  background: rgb(44, 42, 42);
+  transition: 0.2s;
 }
 
 .todo-list {
@@ -29,11 +28,15 @@
   gap: 10px;
   font-size: 16px;
   padding: 10px;
-  border: 1px solid rgb(90, 87, 87);
+  border: 1px solid rgb(15, 14, 14);
   border-radius: 15px;
   background: rgb(238, 227, 227);
-  color: white;
   transition: 0.2s;
+}
+
+#dark .todo-list:hover {
+  background-color: rgb(22, 22, 26);
+  color: #fff;
 }
 
 .todo-nobullet {
@@ -50,9 +53,8 @@
 
 .todo-btn {
   border: none;
+  background-color: transparent;
   border-radius: 4px;
-  background: rgba(20, 20, 20, 0.2);
-  color: white;
   padding: 2px 5px;
   max-width: 50px;
   height: 30px;
@@ -63,15 +65,16 @@
   cursor: pointer;
 }
 
+#dark .todo-btn {
+  background-color: #fff;
+  color: #000;
+}
+
 .todo-editing {
   font-size: 16px;
   padding: 10px;
-  border: 1px solid rgba(10, 180, 180, 1);
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  background: rgba(20, 20, 20, 0.2);
-  color: white;
+
+  background: rgb(238, 227, 213);
   outline: none;
   border-radius: 10px;
   transition: 0.2s;

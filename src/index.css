@@ -5,20 +5,33 @@
   box-sizing: border-box;
 }
 
+#light {
+  background-color: rgb(238, 227, 227);
+  color: #000;
+}
+
+#dark {
+  background-color: #000;
+  color: #fff;
+}
+
 body {
   margin: 0;
   padding: 0;
-  background-color: rgb(238, 227, 227);
   font-family: "Prompt", sans-serif;
   font-size: 16px;
   color: black;
+  background-color: rgb(238, 227, 227);
+  transition: 0.2s;
   height: 100vh;
+  width: 100vw;
 }
 
 .container {
-  padding: 2rem;
   width: 100%;
   height: 100%;
+  margin: 0 auto;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -49,10 +62,28 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  color: black;
   box-shadow: 3px 10px 20px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+}
+
+.mode-btn {
+  border: none;
+  background-color: transparent;
+  font-size: 2rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#dark .mode-btn {
+  color: #fff;
+}
+
+#dark .todo-app {
+  background-color: #000;
+  color: #fff;
+  box-shadow: 3px 10px 20px 5px rgba(255, 255, 255, 0.5);
 }
 
 @media screen and (max-width: 768px) {

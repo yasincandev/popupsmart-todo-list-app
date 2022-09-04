@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import AddTodo from "./components/AddTodo";
 import Login from "./components/Login";
 import TodoList from "./components/TodoList";
 import axios from "axios";
+
+export const ThemeContext = createContext(null);
 
 function App() {
   const [todoList, setTodoList] = useState([]);
@@ -12,6 +14,8 @@ function App() {
 
   const [savedUsername, setSavedUsername] = useState("");
   const [username, setUsername] = useState("");
+
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
     const storageUsername = localStorage.getItem("username");
@@ -122,49 +126,66 @@ function App() {
     setNewTask(e.target.value);
   };
 
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  };
+
   const handleLogin = (e) => {
     localStorage.setItem("username", username);
     setSavedUsername(username);
   };
   return savedUsername ? (
-    <div className="container">
-      <div className="text-toggle-container">
-        <h1 className="welcome-text">Welcome {savedUsername}</h1>
-      </div>
-      <div className="todo-app">
-        <AddTodo
-          formSubmit={formSubmit}
-          handleChange={handleChange}
-          addTask={addTask}
-          value={newTask}
-        />
-        <div className="list-container">
-          {todoList.map((task) => {
-            return (
-              <TodoList
-                todoEditing={todoEditing}
-                setTodoEditing={setTodoEditing}
-                editingText={editingText}
-                setEditingText={setEditingText}
-                completeTask={completeTask}
-                submitEdits={submitEdits}
-                deleteTask={deleteTask}
-                isCompleted={task.isCompleted}
-                key={task.id}
-                content={task.content}
-                id={task.id}
-              />
-            );
-          })}
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <div className="container" id={theme}>
+        <div className="text-toggle-container">
+          <h1 className="welcome-text">Welcome {savedUsername}</h1>
+          {theme === "light" ? (
+            <button className="mode-btn" onClick={toggleTheme}>
+              <i class="fa-regular fa-moon"></i>
+            </button>
+          ) : (
+            <button className="mode-btn" onClick={toggleTheme}>
+              <i class="fa-regular fa-sun"></i>
+            </button>
+          )}
+        </div>
+        <div className="todo-app" id={theme}>
+          <AddTodo
+            formSubmit={formSubmit}
+            handleChange={handleChange}
+            addTask={addTask}
+            value={newTask}
+          />
+          <div className="list-container" id={theme}>
+            {todoList.map((task) => {
+              return (
+                <TodoList
+                  todoEditing={todoEditing}
+                  setTodoEditing={setTodoEditing}
+                  editingText={editingText}
+                  setEditingText={setEditingText}
+                  completeTask={completeTask}
+                  submitEdits={submitEdits}
+                  deleteTask={deleteTask}
+                  isCompleted={task.isCompleted}
+                  key={task.id}
+                  content={task.content}
+                  id={task.id}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </ThemeContext.Provider>
   ) : (
-    <Login
-      username={username}
-      setUsername={setUsername}
-      handleLogin={handleLogin}
-    />
+    <ThemeContext.Provider>
+      <Login
+        username={username}
+        setUsername={setUsername}
+        handleLogin={handleLogin}
+      />
+    </ThemeContext.Provider>
   );
 }
 

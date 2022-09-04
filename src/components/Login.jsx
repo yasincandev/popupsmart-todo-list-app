@@ -5,7 +5,7 @@ const Login = (props) => {
     <div className="login-container">
       <div className="login-form">
         <label className="login-label" htmlFor="username">
-          Usernames
+          Username
           <input
             type="text"
             name="Username"

@@ -122,10 +122,6 @@ body {
   align-items: center;
 }
 
-#dark .loading {
-  background: hsl(210, 24%, 16%);
-}
-
 .dotloader {
   display: inline-block;
   position: relative;

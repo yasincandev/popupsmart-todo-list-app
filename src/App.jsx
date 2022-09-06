@@ -17,7 +17,6 @@ function App() {
   const [username, setUsername] = useState("");
 
   const [theme, setTheme] = useState("");
-  const [savedTheme, setSavedTheme] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -25,25 +24,12 @@ function App() {
 
   const toggleTheme = (e) => {
     setTheme((prevTheme) => (prevTheme === "" ? "dark" : ""));
-    localStorage.setItem("theme", theme);
-    setSavedTheme(theme);
   };
 
   const handleLogin = (e) => {
     localStorage.setItem("username", username);
     setSavedUsername(username);
   };
-
-  useEffect(() => {
-    const storageTheme = localStorage.getItem("theme");
-    if (storageTheme) {
-      setTheme(storageTheme);
-      setSavedTheme(storageTheme);
-    } else {
-      setTheme("");
-      setSavedTheme("");
-    }
-  }, []);
 
   useEffect(() => {
     const storageUsername = localStorage.getItem("username");

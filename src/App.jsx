@@ -181,7 +181,7 @@ function App() {
                 </div>
                 {
                   <div className="theme-buttons">
-                    {theme === "" ? (
+                    {theme === "light" ? (
                       <button className="mode-btn" onClick={toggleTheme}>
                         <i className="fa-regular fa-lightbulb"></i>
                       </button>

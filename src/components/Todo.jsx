@@ -1,7 +1,7 @@
 import React from "react";
-import "./TodoList.css";
+import "./Todo.css";
 
-const TodoList = (props) => {
+const Todo = (props) => {
   return (
     <div
       style={{
@@ -10,9 +10,9 @@ const TodoList = (props) => {
           ? "background-color 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)"
           : "",
       }}
-      className="todo-list"
+      className="todo-container"
     >
-      <div className="list-container">
+      <div className="todo-content">
         {props.id === props.todoEditing ? (
           <input
             type="text"
@@ -21,7 +21,7 @@ const TodoList = (props) => {
             className="todo-editing"
           />
         ) : (
-          <li className="todo-nobullet">{props.content}</li>
+          <p className="todo-lising">{props.content}</p>
         )}
       </div>
       <div className="buttons">
@@ -29,11 +29,8 @@ const TodoList = (props) => {
           <i className="fa-regular fa-trash-can"></i>
         </button>
         {props.id === props.todoEditing ? (
-          <button
-            className="todo-btn"
-            onClick={() => props.submitEdits(props.id)}
-          >
-            <i class="fa-regular fa-thumbs-up"></i>
+          <button className="todo-btn" onClick={() => props.editTask(props.id)}>
+            <i className="fa-regular fa-thumbs-up"></i>
           </button>
         ) : (
           <button
@@ -46,7 +43,7 @@ const TodoList = (props) => {
 
         <button
           className="todo-btn"
-          onClick={() => props.completeTask(props.id)}
+          onClick={() => props.completeTask(props.id, props.isCompleted)}
         >
           <i className="fa-regular fa-square-check"></i>
         </button>
@@ -55,4 +52,4 @@ const TodoList = (props) => {
   );
 };
 
-export default TodoList;
+export default Todo;

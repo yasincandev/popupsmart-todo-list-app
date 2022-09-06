@@ -2,26 +2,24 @@ import React from "react";
 import "./AddTodo.css";
 
 const AddTodo = (props) => {
-  const pressEnter = (event) => {
-    if (event.key === "Enter") {
-      props.addTodo();
-    }
-  };
-
   return (
-    <div className="left-container">
-      <h1 className="header">What Do You Want ToDo?</h1>
-      <div className="input-button-container" onSubmit={props.formSubmit}>
+    <div className="add-todo-container" id={props.theme}>
+      <div className="header" id={props.theme}>
+        <h1 className="header-text" id={props.theme}>
+          What Do You Want ToDo?
+        </h1>
+      </div>
+      <div className="input-button-container" id={props.theme}>
         <input
-          onChange={props.handleChange}
+          onChange={(e) => props.handleChange(e.target.value)}
           type="text"
           value={props.value}
           className="todo-input"
           placeholder="Add a todo"
-          onKeyPress={pressEnter}
+          id={props.theme}
         />
 
-        <button className="add-btn" onClick={props.addTask}>
+        <button className="add-btn" onClick={props.addTask} id={props.theme}>
           Add To Do
         </button>
       </div>

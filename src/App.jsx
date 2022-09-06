@@ -16,15 +16,30 @@ function App() {
   const [savedUsername, setSavedUsername] = useState("");
   const [username, setUsername] = useState("");
 
+  const [savedTheme, setSavedTheme] = useState("light" || "dark");
   const [theme, setTheme] = useState("");
 
   const [loading, setLoading] = useState(false);
 
   // todo : add loading state for when the app is fetching username from local storage
 
-  const toggleTheme = (e) => {
-    setTheme((prevTheme) => (prevTheme === "" ? "dark" : ""));
+  const toggleTheme = () => {
+    localStorage.setItem("theme", theme === "light" ? "dark" : "light");
+    if (theme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
   };
+
+  useEffect(() => {
+    const storageTheme = localStorage.getItem("theme");
+    if (storageTheme) {
+      setTheme(storageTheme);
+    } else {
+      setTheme(savedTheme);
+    }
+  }, [savedTheme]);
 
   const handleLogin = (e) => {
     localStorage.setItem("username", username);

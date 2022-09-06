@@ -29,9 +29,17 @@ const Todo = (props) => {
           <i className="fa-regular fa-trash-can"></i>
         </button>
         {props.id === props.todoEditing ? (
-          <button className="todo-btn" onClick={() => props.editTask(props.id)}>
-            <i className="fa-regular fa-thumbs-up"></i>
-          </button>
+          <div className="edit-cancel-edit-buttons">
+            <button
+              className="todo-btn"
+              onClick={() => props.editTask(props.id)}
+            >
+              <i className="fa-regular fa-thumbs-up"></i>
+            </button>
+            <button className="todo-btn" onClick={() => props.cancelEdit()}>
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          </div>
         ) : (
           <button
             className="todo-btn"

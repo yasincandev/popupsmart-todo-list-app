@@ -28,8 +28,7 @@ body {
 }
 
 .body #dark {
-  background: hsla(210, 24%, 16%, 0.24);
-
+  background: hsla(210, 24%, 16%, 0.616);
   color: rgb(209, 203, 203);
 }
 

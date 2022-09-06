@@ -32,8 +32,8 @@ function App() {
   };
 
   useEffect(() => {
-    const storageUsername = localStorage.getItem("username");
     setLoading(true);
+    const storageUsername = localStorage.getItem("username");
     if (storageUsername) {
       setSavedUsername(storageUsername);
       setLoading(false);
@@ -57,17 +57,17 @@ function App() {
   }, []);
 
   const addTask = async (e) => {
+    if (newTask.length < 3) {
+      alert("Task must be at least 3 characters long");
+      return;
+    }
+
     e.preventDefault();
     setLoading(true);
     const task = {
       content: newTask,
       isCompleted: false,
     };
-
-    if (newTask.length < 3) {
-      alert("Task must be at least 3 characters long");
-      return;
-    }
 
     try {
       const { data: createdTask } = await axios.post(
@@ -141,6 +141,11 @@ function App() {
     }
   };
 
+  const cancelEdit = () => {
+    setTodoEditing(null);
+    setEditingText("");
+  };
+
   if (savedUsername) {
     return (
       <ThemeContext.Provider value={{ theme }}>
@@ -187,6 +192,7 @@ function App() {
                 {todoList.map((task) => {
                   return (
                     <Todo
+                      cancelEdit={cancelEdit}
                       loading={loading}
                       todoEditing={todoEditing}
                       setTodoEditing={setTodoEditing}
@@ -210,7 +216,7 @@ function App() {
     );
   } else {
     return (
-      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <ThemeContext.Provider value={{ theme }}>
         {loading ? (
           <RotateLoader
             className="dotloader"

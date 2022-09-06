@@ -90,6 +90,13 @@
   color: rgb(209, 203, 203);
 }
 
+.edit-cancel-edit-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
 @media screen and (max-width: 768px) {
   .todos {
     grid-template-columns: 1fr 1fr;

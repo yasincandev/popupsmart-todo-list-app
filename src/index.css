@@ -89,7 +89,7 @@ body {
 
 .todo-component {
   display: flex;
-
+  align-items: center;
   flex-direction: column;
   width: 70%;
   height: 100%;
@@ -180,10 +180,15 @@ body {
   }
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 470px) {
   .todo-component {
     width: 90%;
   }
+
+  #dark .todo-component {
+    width: 90%;
+  }
+
   .loading {
     position: absolute;
     top: 40%;

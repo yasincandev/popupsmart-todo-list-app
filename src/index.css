@@ -154,4 +154,48 @@ body {
   .container {
     height: 100vh;
   }
+
+  .loading {
+    position: absolute;
+    top: 40%;
+    left: 35%;
+    width: 180px;
+    height: 100px;
+    background-color: hwb(0 4% 94% / 0.116);
+    border-radius: 10px;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dotloader {
+    display: inline-block;
+    position: relative;
+    width: 60px;
+    height: 40px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .loading {
+    position: absolute;
+    top: 40%;
+    left: 35%;
+    width: 120px;
+    height: 60px;
+    background-color: hwb(0 4% 94% / 0.116);
+    border-radius: 10px;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dotloader {
+    display: inline-block;
+    position: relative;
+    width: 10px;
+    height: 10px;
+  }
 }

@@ -212,18 +212,18 @@ function App() {
     return (
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
         {loading ? (
-          <Login
-            loading={loading}
-            username={username}
-            setUsername={setUsername}
-            handleLogin={handleLogin}
-          />
-        ) : (
           <RotateLoader
             className="dotloader"
             color="#e87914"
             loading={loading}
             size={100}
+          />
+        ) : (
+          <Login
+            loading={loading}
+            username={username}
+            setUsername={setUsername}
+            handleLogin={handleLogin}
           />
         )}
       </ThemeContext.Provider>

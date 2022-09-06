@@ -137,6 +137,10 @@ body {
 }
 
 @media screen and (max-width: 768px) {
+  .todo-component {
+    width: 90%;
+  }
+
   .body {
     background-image: linear-gradient(
         rgba(255, 255, 255, 0.397),
@@ -177,6 +181,9 @@ body {
 }
 
 @media screen and (max-width: 425px) {
+  .todo-component {
+    width: 90%;
+  }
   .loading {
     position: absolute;
     top: 40%;

@@ -1,26 +1,27 @@
 import React from "react";
 import "./AddTodo.css";
+import { BeatLoader } from "react-spinners";
 
-const AddTodo = (props) => {
+const AddTodo = ({ addLoading, handleChange, addTask, value, theme }) => {
   return (
-    <div className="add-todo-container" id={props.theme}>
-      <div className="header" id={props.theme}>
-        <h1 className="header-text" id={props.theme}>
+    <div className="add-todo-container" id={theme}>
+      <div className="header" id={theme}>
+        <h1 className="header-text" id={theme}>
           What Do You Want ToDo?
         </h1>
       </div>
-      <div className="input-button-container" id={props.theme}>
+      <div className="input-button-container" id={theme}>
         <input
-          onChange={(e) => props.handleChange(e.target.value)}
+          onChange={(e) => handleChange(e.target.value)}
           type="text"
-          value={props.value}
+          value={value}
           className="todo-input"
           placeholder="Add a todo"
-          id={props.theme}
+          id={theme}
         />
 
-        <button className="add-btn" onClick={props.addTask} id={props.theme}>
-          Add To Do
+        <button className="add-btn" onClick={addTask} id={theme}>
+          {addLoading ? <BeatLoader /> : "Add To Do "}
         </button>
       </div>
     </div>

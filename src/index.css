@@ -72,6 +72,7 @@ body {
   margin-top: 1rem;
   background: transparent;
   margin: 0 auto;
+  position: relative;
 }
 
 .add-todo {
@@ -106,26 +107,7 @@ body {
 }
 
 /* spinner & darkmode toggle*/
-.loading {
-  position: absolute;
-  top: 40%;
-  left: 45%;
-  width: 250px;
-  height: 150px;
-  background-color: hwb(0 4% 94% / 0.116);
-  border-radius: 10px;
-  z-index: 999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.dotloader {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
 .mode-btn {
   border: none;
   background-color: transparent;
@@ -138,6 +120,7 @@ body {
 @media screen and (max-width: 768px) {
   .todo-component {
     width: 90%;
+    background-color: rgba(0, 0, 0, 0.123);
   }
 
   .body {
@@ -170,13 +153,6 @@ body {
     justify-content: center;
     align-items: center;
   }
-
-  .dotloader {
-    display: inline-block;
-    position: relative;
-    width: 60px;
-    height: 40px;
-  }
 }
 
 @media screen and (max-width: 470px) {
@@ -200,12 +176,5 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-
-  .dotloader {
-    display: inline-block;
-    position: relative;
-    width: 10px;
-    height: 10px;
   }
 }

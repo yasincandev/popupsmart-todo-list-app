@@ -79,6 +79,8 @@
   display: inline-block;
   position: relative;
   transition: 0.5s;
+  display: flex;
+  justify-content: center;
 }
 
 #dark .add-btn {
@@ -86,7 +88,7 @@
   background-color: hsl(210, 24%, 16%);
 }
 
-.add-btn:after {
+/* .add-btn:after {
   content: "»";
   position: absolute;
   opacity: 0;
@@ -103,6 +105,15 @@
 .add-btn:hover:after {
   opacity: 1;
   right: 10px;
+} */
+
+.dotloader {
+  color: #000;
+  margin-left: 10px;
+  position: absolute;
+  width: 20px;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
 }
 
 @media screen and (max-width: 768px) {

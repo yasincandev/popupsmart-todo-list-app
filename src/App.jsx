@@ -3,7 +3,7 @@ import AddTodo from "./components/AddTodo";
 import Login from "./components/Login";
 import Todo from "./components/Todo";
 import axios from "axios";
-import { RotateLoader } from "react-spinners";
+import { BarLoader, BeatLoader } from "react-spinners";
 
 export const ThemeContext = createContext(null);
 
@@ -12,52 +12,20 @@ function App() {
   const [newTask, setNewTask] = useState("");
   const [todoEditing, setTodoEditing] = useState(null);
   const [editingText, setEditingText] = useState("");
-
-  const [savedUsername, setSavedUsername] = useState("");
   const [username, setUsername] = useState("");
-
-  const [savedTheme, setSavedTheme] = useState("light" || "dark");
-  const [theme, setTheme] = useState("");
-
+  const [savedUsername, setSavedUsername] = useState("");
+  const [theme, setTheme] = useState("light");
+  const [addLoading, setAddLoading] = useState(false);
+  const [todoLoading, setTodoLoading] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
 
-  // todo : add loading state for when the app is fetching username from local storage
-
-  const toggleTheme = () => {
-    localStorage.setItem("theme", theme === "light" ? "dark" : "light");
-    if (theme === "light") {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
-  };
-
-  useEffect(() => {
-    const storageTheme = localStorage.getItem("theme");
-    if (storageTheme) {
-      setTheme(storageTheme);
-    } else {
-      setTheme(savedTheme);
-    }
-  }, [savedTheme]);
-
-  const handleLogin = (e) => {
-    localStorage.setItem("username", username);
-    setSavedUsername(username);
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    const storageUsername = localStorage.getItem("username");
-    if (storageUsername) {
-      setSavedUsername(storageUsername);
-      setLoading(false);
-    }
-  }, []);
+  // add loading state for when the app is fetching username from local storage
+  //
 
   useEffect(() => {
     async function getTodos() {
-      setLoading(true);
+      setLoginLoading(true);
       try {
         const response = await axios.get(
           `https://631462d5fc9dc45cb4ecb7bb.mockapi.io/todos`
@@ -68,22 +36,48 @@ function App() {
       }
     }
     getTodos();
-    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    setLoginLoading(true);
+    const storageUsername = localStorage.getItem("username");
+    if (storageUsername) {
+      setSavedUsername(storageUsername);
+    }
+    setLoginLoading(false);
+  }, []);
+
+  const handleLogin = () => {
+    localStorage.setItem("username", username);
+    setSavedUsername(username);
+  };
+
+  useEffect(() => {
+    const storageTheme = localStorage.getItem("theme");
+    if (storageTheme) {
+      setTheme(storageTheme);
+    }
+  }, []);
+
+  const isLight = theme === "light";
+
+  const toggleTheme = () => {
+    const selectedTheme = isLight ? "dark" : "light";
+    localStorage.setItem("theme", selectedTheme);
+    setTheme(selectedTheme);
+  };
 
   const addTask = async (e) => {
     if (newTask.length < 3) {
       alert("Task must be at least 3 characters long");
       return;
     }
-
     e.preventDefault();
-    setLoading(true);
+    setAddLoading(true);
     const task = {
       content: newTask,
       isCompleted: false,
     };
-
     try {
       const { data: createdTask } = await axios.post(
         `https://631462d5fc9dc45cb4ecb7bb.mockapi.io/todos`,
@@ -91,7 +85,7 @@ function App() {
       );
       setTodoList([...todoList, createdTask]);
       setNewTask("");
-      setLoading(false);
+      setAddLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -104,14 +98,13 @@ function App() {
         `https://631462d5fc9dc45cb4ecb7bb.mockapi.io/todos/${id}`
       );
       setTodoList(todoList.filter((task) => task.id !== id));
-      setLoading(false);
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
   const completeTask = async (id, isCompleted) => {
-    setLoading(true);
     try {
       await axios.put(
         `https://631462d5fc9dc45cb4ecb7bb.mockapi.io/todos/${id}`,
@@ -119,16 +112,19 @@ function App() {
           isCompleted: !isCompleted,
         }
       );
+
       setTodoList(
         todoList.map((task) => {
           if (task.id === id) {
-            return { ...task, isCompleted: !isCompleted };
+            return {
+              ...task,
+              isCompleted: !isCompleted,
+            };
           } else {
             return task;
           }
         })
       );
-      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -138,7 +134,10 @@ function App() {
     setLoading(true);
     try {
       const task = todoList.find((task) => task.id === id);
-      const updatedTask = { ...task, content: editingText };
+      const updatedTask = {
+        ...task,
+        content: editingText,
+      };
       await axios.put(
         `https://631462d5fc9dc45cb4ecb7bb.mockapi.io/todos/${id}`,
         updatedTask
@@ -148,9 +147,10 @@ function App() {
           task.id === id ? { ...task, content: editingText } : task
         )
       );
+
       setTodoEditing(null);
-      setEditingText("");
       setLoading(false);
+      setEditingText("");
     } catch (error) {
       console.log(error);
     }
@@ -161,95 +161,77 @@ function App() {
     setEditingText("");
   };
 
-  if (savedUsername) {
-    return (
-      <ThemeContext.Provider value={{ theme }}>
-        {loading ? (
-          <div className="loading">
-            <RotateLoader
-              className="dotloader"
-              color="#e87914"
-              loading={loading}
-            />
-          </div>
-        ) : (
-          <div className="container" id={theme}>
-            <div className="welcome-text-add-todo" id={theme}>
-              <div className="welcome-text-theme-mode" id={theme}>
-                <div className="welcome-heading">
-                  <h1 className="welcome-text">Welcome {savedUsername}</h1>
-                </div>
-                {
-                  <div className="theme-buttons">
-                    {theme === "light" ? (
-                      <button className="mode-btn" onClick={toggleTheme}>
-                        <i className="fa-regular fa-lightbulb"></i>
-                      </button>
-                    ) : (
-                      <button className="mode-btn" onClick={toggleTheme}>
-                        <i className="fa-solid fa-lightbulb"></i>
-                      </button>
-                    )}
-                  </div>
-                }
-              </div>
-              <div className="add-todo" id={theme}>
-                <AddTodo
-                  loading={loading}
-                  handleChange={setNewTask}
-                  addTask={addTask}
-                  value={newTask}
-                />
-              </div>
-            </div>
-            <div className="todo-component" id={theme}>
-              <div className="todos" id={theme}>
-                {todoList.map((task) => {
-                  return (
-                    <Todo
-                      cancelEdit={cancelEdit}
-                      loading={loading}
-                      todoEditing={todoEditing}
-                      setTodoEditing={setTodoEditing}
-                      editingText={editingText}
-                      setEditingText={setEditingText}
-                      completeTask={completeTask}
-                      editTask={editTask}
-                      deleteTask={deleteTask}
-                      isCompleted={task.isCompleted}
-                      key={task.id}
-                      content={task.content}
-                      id={task.id}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        )}
-      </ThemeContext.Provider>
-    );
-  } else {
-    return (
-      <ThemeContext.Provider value={{ theme }}>
-        {loading ? (
-          <RotateLoader
-            className="dotloader"
-            color="#e87914"
-            loading={loading}
-            size={100}
-          />
-        ) : (
+  return (
+    <ThemeContext.Provider value={{ theme }}>
+      {loginLoading ? (
+        savedUsername ? (
           <Login
-            loading={loading}
+            loginLoading={loginLoading}
             username={username}
             setUsername={setUsername}
             handleLogin={handleLogin}
           />
-        )}
-      </ThemeContext.Provider>
-    );
-  }
+        ) : (
+          <BarLoader
+            color="#dbdbdb"
+            style={{ position: "absolute", top: "50%", left: "50%", zIndex: 1 }}
+            size={150}
+          />
+        )
+      ) : (
+        <div className="container" id={theme}>
+          <div className="welcome-text-add-todo" id={theme}>
+            <div className="welcome-text-theme-mode" id={theme}>
+              <div className="welcome-heading">
+                <h1 className="welcome-text">Welcome {savedUsername}</h1>
+              </div>
+              <div className="theme-buttons">
+                <button className="mode-btn" onClick={toggleTheme}>
+                  <i
+                    className={`fa-${
+                      theme === "light" ? "regular" : "solid"
+                    } fa-lightbulb`}
+                  ></i>
+                </button>
+              </div>
+            </div>
+            <div className="add-todo" id={theme}>
+              <AddTodo
+                handleChange={setNewTask}
+                addTask={addTask}
+                value={newTask}
+                addLoading={addLoading}
+              />
+            </div>
+          </div>
+          <div className="todo-component" id={theme}>
+            <div className="todos" id={theme}>
+              {todoList.map((task) => {
+                return (
+                  <Todo
+                    cancelEdit={cancelEdit}
+                    todoEditing={todoEditing}
+                    setTodoEditing={setTodoEditing}
+                    setTodoLoading={setTodoLoading}
+                    editingText={editingText}
+                    setEditingText={setEditingText}
+                    completeTask={completeTask}
+                    editTask={editTask}
+                    deleteTask={deleteTask}
+                    isCompleted={task.isCompleted}
+                    key={task.id}
+                    content={task.content}
+                    id={task.id}
+                    loading={todoLoading === task.id}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+    </ThemeContext.Provider>
+  );
 }
 
 export default App;

@@ -29,9 +29,13 @@ const Todo = ({
     >
       <div className="todo-content">
         {loading && (
-          <div className="todo-loading">
-            <BeatLoader color="#dbdbdb" size={50} />
-          </div>
+          <BeatLoader
+            color="#201f1f4b"
+            size={30}
+            style={{
+              position: "absolute",
+            }}
+          />
         )}
         {id === todoEditing ? (
           <input
@@ -61,8 +65,8 @@ const Todo = ({
             <button
               className="todo-btn"
               onClick={() => {
+                setTodoLoading(id, content);
                 editTask(id);
-                setTodoLoading(id);
               }}
             >
               <i className="fa-regular fa-thumbs-up"></i>

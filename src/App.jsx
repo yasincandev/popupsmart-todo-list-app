@@ -3,7 +3,8 @@ import AddTodo from "./components/AddTodo";
 import Login from "./components/Login";
 import Todo from "./components/Todo";
 import axios from "axios";
-import { BarLoader, BeatLoader } from "react-spinners";
+import { BarLoader } from "react-spinners";
+import Loading from "./components/Loading";
 
 export const ThemeContext = createContext(null);
 
@@ -20,8 +21,15 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
 
-  // add loading state for when the app is fetching username from local storage
-  //
+  useEffect(() => {
+    setLoginLoading(true);
+    const storageUsername = localStorage.getItem("username");
+    if (storageUsername) {
+      setSavedUsername(storageUsername);
+    }
+
+    setLoginLoading(false);
+  }, []);
 
   useEffect(() => {
     async function getTodos() {
@@ -36,14 +44,6 @@ function App() {
       }
     }
     getTodos();
-  }, []);
-
-  useEffect(() => {
-    setLoginLoading(true);
-    const storageUsername = localStorage.getItem("username");
-    if (storageUsername) {
-      setSavedUsername(storageUsername);
-    }
     setLoginLoading(false);
   }, []);
 
@@ -53,10 +53,12 @@ function App() {
   };
 
   useEffect(() => {
+    setLoginLoading(true);
     const storageTheme = localStorage.getItem("theme");
     if (storageTheme) {
       setTheme(storageTheme);
     }
+    setLoginLoading(false);
   }, []);
 
   const isLight = theme === "light";
@@ -147,9 +149,9 @@ function App() {
           task.id === id ? { ...task, content: editingText } : task
         )
       );
-
-      setTodoEditing(null);
       setLoading(false);
+      setTodoLoading(null);
+      setTodoEditing(null);
       setEditingText("");
     } catch (error) {
       console.log(error);
@@ -162,23 +164,8 @@ function App() {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme }}>
-      {loginLoading ? (
-        savedUsername ? (
-          <Login
-            loginLoading={loginLoading}
-            username={username}
-            setUsername={setUsername}
-            handleLogin={handleLogin}
-          />
-        ) : (
-          <BarLoader
-            color="#dbdbdb"
-            style={{ position: "absolute", top: "50%", left: "50%", zIndex: 1 }}
-            size={150}
-          />
-        )
-      ) : (
+    <ThemeContext.Provider value={{ theme }} style={{ position: "relative" }}>
+      {savedUsername ? (
         <div className="container" id={theme}>
           <div className="welcome-text-add-todo" id={theme}>
             <div className="welcome-text-theme-mode" id={theme}>
@@ -228,6 +215,18 @@ function App() {
               })}
             </div>
           </div>
+        </div>
+      ) : (
+        <div className="login-container" id={theme}>
+          {loginLoading ? (
+            <Login
+              handleChange={setUsername}
+              handleLogin={handleLogin}
+              value={username}
+            />
+          ) : (
+            <Loading />
+          )}
         </div>
       )}
     </ThemeContext.Provider>

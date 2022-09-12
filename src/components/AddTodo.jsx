@@ -21,7 +21,7 @@ const AddTodo = ({ addLoading, handleChange, addTask, value, theme }) => {
         />
 
         <button className="add-btn" onClick={addTask} id={theme}>
-          {addLoading ? <BeatLoader /> : "Add To Do "}
+          {addLoading ? <BeatLoader size={27} /> : "Add To Do "}
         </button>
       </div>
     </div>

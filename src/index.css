@@ -27,6 +27,15 @@ body {
   background-attachment: fixed;
 }
 
+.bar-loader {
+  max-width: 500px;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  position: relative;
+  z-index: 9999;
+}
+
 .body #dark {
   background: hsla(210, 24%, 16%, 0.616);
   color: rgb(209, 203, 203);

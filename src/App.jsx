@@ -24,7 +24,7 @@ function App() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 3000);
   }, []);
 
   useEffect(() => {
@@ -160,7 +160,7 @@ function App() {
       value={{ theme, isLight }}
       style={{ position: "relative" }}
     >
-      {loading && <Loading id={theme} />}
+      {loading && <Loading id={theme} isLight={isLight} />}
       {savedUsername ? (
         <div className="container" id={theme}>
           <div className="welcome-text-add-todo" id={theme}>

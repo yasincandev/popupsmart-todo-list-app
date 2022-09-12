@@ -21,13 +21,6 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, []);
-
-  useEffect(() => {
     const storageTheme = localStorage.getItem("theme");
     if (storageTheme) {
       setTheme(storageTheme);
@@ -36,6 +29,7 @@ function App() {
 
   useEffect(() => {
     async function getTodos() {
+      setLoading(true);
       try {
         const response = await axios.get(
           `https://631462d5fc9dc45cb4ecb7bb.mockapi.io/todos`
@@ -44,6 +38,7 @@ function App() {
       } catch (error) {
         console.log(error);
       }
+      setLoading(false);
     }
     getTodos();
   }, []);

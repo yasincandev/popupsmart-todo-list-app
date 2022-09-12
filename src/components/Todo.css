@@ -1,9 +1,7 @@
 .todos {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 2rem 2rem;
-
-  overflow-y: auto;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
   color: #000;
   padding: 2rem;
   border-radius: 15px;
@@ -25,7 +23,30 @@
   border-radius: 15px;
   background: rgba(207, 207, 207, 0.767);
   transition: 0.2s;
-  width: 85%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+.todo-component {
+  scrollbar-width: auto;
+  scrollbar-color: #b0b0b0 #030303;
+}
+
+/* Chrome, Edge, and Safari */
+.todo-component::-webkit-scrollbar {
+  width: 15px;
+}
+
+.todo-component::-webkit-scrollbar-track {
+  background: #03030359;
+}
+
+.todo-component::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0;
+  border-radius: 10px;
+  border: 3px solid #929090;
 }
 
 #dark .todo-container {
@@ -41,7 +62,6 @@
   gap: 1rem;
   width: 100%;
   margin: 0 auto;
-  position: relative;
 }
 
 #dark .todo-content {

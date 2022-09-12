@@ -12,13 +12,21 @@ function App() {
   const [todoEditing, setTodoEditing] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [username, setUsername] = useState("");
-  const [savedUsername, setSavedUsername] = useState(
-    () => localStorage.getItem("username") || ""
-  );
+  const [savedUsername, setSavedUsername] = useState("");
   const [theme, setTheme] = useState("light");
   const [addLoading, setAddLoading] = useState(false);
-  const [todoLoading, setTodoLoading] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingTodoId, setLoadingTodoId] = useState("");
+  const [checkingUsername, setCheckingUsername] = useState(true);
+  const [fetchingTodos, setFetchingTodos] = useState(false);
+  const loading = checkingUsername || fetchingTodos;
+
+  useEffect(() => {
+    const username = localStorage.getItem("username");
+    if (username) {
+      setSavedUsername(username);
+    }
+    setCheckingUsername(false);
+  }, []);
 
   useEffect(() => {
     const storageTheme = localStorage.getItem("theme");
@@ -29,7 +37,7 @@ function App() {
 
   useEffect(() => {
     async function getTodos() {
-      setLoading(true);
+      setFetchingTodos(true);
       try {
         const response = await axios.get(
           `https://631462d5fc9dc45cb4ecb7bb.mockapi.io/todos`
@@ -37,11 +45,14 @@ function App() {
         setTodoList(response.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setFetchingTodos(false);
       }
-      setLoading(false);
     }
-    getTodos();
-  }, []);
+    if (savedUsername) {
+      getTodos();
+    }
+  }, [savedUsername]);
 
   const handleLogin = () => {
     localStorage.setItem("username", username);
@@ -81,7 +92,6 @@ function App() {
   };
 
   const deleteTask = async (id) => {
-    setLoading(true);
     try {
       await axios.delete(
         `https://631462d5fc9dc45cb4ecb7bb.mockapi.io/todos/${id}`
@@ -89,8 +99,9 @@ function App() {
       setTodoList(todoList.filter((task) => task.id !== id));
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingTodoId("");
     }
-    setLoading(false);
   };
 
   const completeTask = async (id, isCompleted) => {
@@ -116,11 +127,12 @@ function App() {
       );
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingTodoId("");
     }
   };
 
   const editTask = async (id) => {
-    setLoading(true);
     try {
       const task = todoList.find((task) => task.id === id);
       const updatedTask = {
@@ -136,12 +148,12 @@ function App() {
           task.id === id ? { ...task, content: editingText } : task
         )
       );
-      setLoading(false);
-      setTodoLoading(null);
       setTodoEditing(null);
       setEditingText("");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingTodoId("");
     }
   };
 
@@ -151,12 +163,10 @@ function App() {
   };
 
   return (
-    <ThemeContext.Provider
-      value={{ theme, isLight }}
-      style={{ position: "relative" }}
-    >
-      {loading && <Loading id={theme} isLight={isLight} />}
-      {savedUsername ? (
+    <ThemeContext.Provider value={{ theme, isLight }}>
+      {loading ? (
+        <Loading id={theme} isLight={isLight} />
+      ) : savedUsername ? (
         <div className="container" id={theme}>
           <div className="welcome-text-add-todo" id={theme}>
             <div className="welcome-text-theme-mode" id={theme}>
@@ -190,7 +200,7 @@ function App() {
                     cancelEdit={cancelEdit}
                     todoEditing={todoEditing}
                     setTodoEditing={setTodoEditing}
-                    setTodoLoading={setTodoLoading}
+                    setTodoLoading={setLoadingTodoId}
                     editingText={editingText}
                     setEditingText={setEditingText}
                     completeTask={completeTask}
@@ -200,7 +210,7 @@ function App() {
                     key={task.id}
                     content={task.content}
                     id={task.id}
-                    loading={todoLoading === task.id}
+                    loading={loadingTodoId === task.id}
                   />
                 );
               })}

@@ -18,10 +18,18 @@ const AddTodo = ({ addLoading, handleChange, addTask, value, theme }) => {
           className="todo-input"
           placeholder="Add a todo"
           id={theme}
+          disabled={addLoading}
         />
 
-        <button className="add-btn" onClick={addTask} id={theme}>
-          {addLoading ? <BeatLoader size={27} /> : "Add To Do "}
+        <button
+          className="add-btn"
+          onClick={addTask}
+          id={theme}
+          style={{
+            pointerEvents: addLoading ? "none" : "all",
+          }}
+        >
+          {addLoading ? <BeatLoader size={16} /> : "Add To Do"}
         </button>
       </div>
     </div>

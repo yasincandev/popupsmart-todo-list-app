@@ -75,12 +75,13 @@
   transition: all 0.5s;
   cursor: pointer;
   box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.7);
-  cursor: pointer;
-  display: inline-block;
   position: relative;
   transition: 0.5s;
   display: flex;
+  align-items: center;
   justify-content: center;
+  height: 100%;
+  min-width: 125px;
 }
 
 #dark .add-btn {

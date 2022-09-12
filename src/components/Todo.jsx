@@ -27,28 +27,6 @@ const Todo = ({
       }}
       className="todo-container"
     >
-      <div className="todo-content">
-        {loading && (
-          <BeatLoader
-            color="#201f1f4b"
-            size={30}
-            style={{
-              position: "absolute",
-            }}
-          />
-        )}
-        {id === todoEditing ? (
-          <input
-            type="text"
-            onChange={(e) => setEditingText(e.target.value)}
-            value={editingText}
-            className="todo-editing"
-          />
-        ) : (
-          <p>{content}</p>
-        )}
-      </div>
-
       <div className="buttons">
         <button
           onClick={() => {
@@ -65,7 +43,7 @@ const Todo = ({
             <button
               className="todo-btn"
               onClick={() => {
-                setTodoLoading(id, content);
+                setTodoLoading(id);
                 editTask(id);
               }}
             >
@@ -91,10 +69,35 @@ const Todo = ({
           className="todo-btn"
           onClick={() => {
             completeTask(id, isCompleted);
+            setTodoLoading(id);
           }}
         >
           <i className="fa-regular fa-square-check"></i>
         </button>
+      </div>
+      <div className="todo-content">
+        {id === todoEditing ? (
+          <input
+            type="text"
+            onChange={(e) => setEditingText(e.target.value)}
+            value={editingText}
+            className="todo-editing"
+          />
+        ) : (
+          <p>{content}</p>
+        )}
+      </div>
+      <div
+        style={{
+          display: loading ? "flex" : "none",
+          position: "absolute",
+          inset: "0px",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(0,0,0,0.5)",
+        }}
+      >
+        <BeatLoader color="white" size={16} />
       </div>
     </div>
   );

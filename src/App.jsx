@@ -3,9 +3,7 @@ import AddTodo from "./components/AddTodo";
 import Login from "./components/Login";
 import Todo from "./components/Todo";
 import axios from "axios";
-import { BarLoader } from "react-spinners";
 import Loading from "./components/Loading";
-
 export const ThemeContext = createContext(null);
 
 function App() {
@@ -14,34 +12,29 @@ function App() {
   const [todoEditing, setTodoEditing] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [username, setUsername] = useState("");
-  const [savedUsername, setSavedUsername] = useState("");
+  const [savedUsername, setSavedUsername] = useState(
+    () => localStorage.getItem("username") || ""
+  );
   const [theme, setTheme] = useState("light");
   const [addLoading, setAddLoading] = useState(false);
   const [todoLoading, setTodoLoading] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [loginLoading, setLoginLoading] = useState(false);
 
   useEffect(() => {
-    setLoginLoading(true);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 4000);
+  }, []);
+
+  useEffect(() => {
     const storageTheme = localStorage.getItem("theme");
     if (storageTheme) {
       setTheme(storageTheme);
     }
-    setLoginLoading(false);
   }, []);
 
   useEffect(() => {
-    setLoginLoading(true);
-    const storageUsername = localStorage.getItem("username");
-    if (storageUsername) {
-      setSavedUsername(storageUsername);
-    }
-
-    setLoginLoading(false);
-  }, []);
-
-  useEffect(() => {
-    setLoginLoading(true);
     async function getTodos() {
       try {
         const response = await axios.get(
@@ -53,7 +46,6 @@ function App() {
       }
     }
     getTodos();
-    setLoginLoading(false);
   }, []);
 
   const handleLogin = () => {
@@ -164,10 +156,12 @@ function App() {
   };
 
   return (
-    <ThemeContext.Provider value={{ isLight, toggleTheme }}>
-      {loginLoading ? (
-        <Loading />
-      ) : savedUsername ? (
+    <ThemeContext.Provider
+      value={{ theme, isLight }}
+      style={{ position: "relative" }}
+    >
+      {loading && <Loading id={theme} />}
+      {savedUsername ? (
         <div className="container" id={theme}>
           <div className="welcome-text-add-todo" id={theme}>
             <div className="welcome-text-theme-mode" id={theme}>
@@ -222,7 +216,8 @@ function App() {
         <Login
           handleChange={setUsername}
           handleLogin={handleLogin}
-          value={username}
+          username={username}
+          setUsername={setUsername}
         />
       )}
     </ThemeContext.Provider>
@@ -230,59 +225,3 @@ function App() {
 }
 
 export default App;
-
-/* {loginLoading && <Loading />}
-{savedUsername ? (
-  <div className="container" id={theme}>
-    <div className="welcome-text-add-todo" id={theme}>
-      <div className="welcome-text-theme-mode" id={theme}>
-        <div className="welcome-heading">
-          <h1 className="welcome-text">Welcome {savedUsername}</h1>
-        </div>
-        <div className="theme-buttons">
-          <button className="mode-btn" onClick={toggleTheme}>
-            <i
-              className={`fa-${
-                theme === "light" ? "regular" : "solid"
-              } fa-lightbulb`}
-            ></i>
-          </button>
-        </div>
-      </div>
-      <div className="add-todo" id={theme}>
-        <AddTodo
-          handleChange={setNewTask}
-          addTask={addTask}
-          value={newTask}
-          addLoading={addLoading}
-        />
-      </div>
-    </div>
-    <div className="todo-component" id={theme}>
-      <div className="todos" id={theme}>
-        {todoList.map((task) => {
-          return (
-            <Todo
-              cancelEdit={cancelEdit}
-              todoEditing={todoEditing}
-              setTodoEditing={setTodoEditing}
-              setTodoLoading={setTodoLoading}
-              editingText={editingText}
-              setEditingText={setEditingText}
-              completeTask={completeTask}
-              editTask={editTask}
-              deleteTask={deleteTask}
-              isCompleted={task.isCompleted}
-              key={task.id}
-              content={task.content}
-              id={task.id}
-              loading={todoLoading === task.id}
-            />
-          );
-        })}
-      </div>
-    </div>
-  </div>
-) : (
-
-)} */
